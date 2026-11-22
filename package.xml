@@ -34,6 +34,8 @@
   <test_depend>launch_ros</test_depend>
   <test_depend>rclpy</test_depend>
   <test_depend>sensor_msgs</test_depend>
+  <!-- Python tf2_ros (StaticTransformBroadcaster) used by test_merger.launch.py -->
+  <test_depend>tf2_ros_py</test_depend>
   <test_depend>python3-pytest</test_depend>
 
   <export>
