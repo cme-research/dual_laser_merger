@@ -28,6 +28,10 @@ if(BUILD_TESTING)
   set(ament_pep257_FOUND TRUE)
   set(ament_xmllint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
+
+  # Node-level test with synthetic scans (CMEXAIII parameters).
+  find_package(launch_testing_ament_cmake REQUIRED)
+  add_launch_test(test/test_merger.launch.py TIMEOUT 120)
 endif()
 
 ament_auto_package()

@@ -207,14 +207,15 @@ void MergerNode::sub_callback(
     pcl::fromROSMsg(cloud_in_1, pcl_cloud_in_1);
     pcl::fromROSMsg(cloud_in_2, pcl_cloud_in_2);
 
-    if (pcl_cloud_in_1.points.empty() || pcl_cloud_in_2.points.empty()) {
-      return;
-    }
-
+    // A laser that sees nothing in range yields an empty cloud (projectLaser
+    // drops inf ranges). Previously the callback returned here when EITHER
+    // cloud was empty, so the other laser's obstacles were never published and
+    // downstream costmaps got no clearing scans in open space. Merge whatever
+    // there is; an all-empty input publishes an all-free scan.
     pcl_cloud_out = pcl_cloud_in_1;
     pcl_cloud_out += pcl_cloud_in_2;
 
-    if(enable_shadow_filter_param) {
+    if(enable_shadow_filter_param && !pcl_cloud_out.points.empty()) {
       allowed_radius_scaled = allowed_radius_param / range_max_param;
       kdtree.setInputCloud(pcl_cloud_out.makeShared());
 

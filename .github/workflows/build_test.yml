@@ -12,6 +12,7 @@ on:
   pull_request:
     branches:
       - jazzy
+      - jazzy_dev
 
 jobs:
   test_build_jazzy:
@@ -26,3 +27,11 @@ jobs:
           skip-tests: false
           rosdep-check: true
           package-name: 'dual_laser_merger'
+          # Run real tests; ament linters (ctest label / pytest marker "linter") are excluded.
+          colcon-defaults: |
+            {
+              "test": {
+                "ctest-args": ["-LE", "linter"],
+                "pytest-args": ["-m", "not linter"]
+              }
+            }
